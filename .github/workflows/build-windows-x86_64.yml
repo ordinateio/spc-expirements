@@ -1,0 +1,35 @@
+name: "Build on Windows x86_64"
+
+on:
+  workflow_dispatch:
+    version:
+      description: "PHP version to build"
+      required: true
+      type: choice
+      default: "8.4"
+      options:
+        - "8.4"
+        - "8.3"
+        - "8.2"
+        - "8.1"
+
+env:
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+jobs:
+  build:
+    name: "Build ${{ inputs.version }} on Windows x86_64"
+    runs-on: windows-latest
+
+    steps:
+      - name: "Checkout"
+        uses: actions/checkout@v4
+
+      - name: "Download SPC"
+        shell: bash
+        run: |
+          curl.exe -fsSL -o spc.exe https://dl.static-php.dev/static-php-cli/spc-bin/nightly/spc-windows-x64.exe
+
+      - name: "Run SPC"
+        shell: bash
+        run: ./spc --version
