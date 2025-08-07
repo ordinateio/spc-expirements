@@ -2,16 +2,17 @@ name: "Build on Windows x86_64"
 
 on:
   workflow_dispatch:
-    version:
-      description: "PHP version to build"
-      required: true
-      type: choice
-      default: "8.4"
-      options:
-        - "8.4"
-        - "8.3"
-        - "8.2"
-        - "8.1"
+    inputs:
+      version:
+        description: "PHP version to build"
+        required: true
+        type: choice
+        default: "8.4"
+        options:
+          - "8.4"
+          - "8.3"
+          - "8.2"
+          - "8.1"
 
 env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
