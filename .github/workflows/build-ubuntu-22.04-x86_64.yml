@@ -62,7 +62,9 @@ jobs:
 
       - name: "Download the SPC binary"
         if: steps.cache-spc-binary.outputs.cache-hit != 'true'
-        run: curl -fsSL -o spc https://dl.static-php.dev/static-php-cli/spc-bin/nightly/spc-linux-x86_64
+        run: |
+          curl -fsSL -o spc https://dl.static-php.dev/static-php-cli/spc-bin/nightly/spc-linux-x86_64
+          chmod +x spc
 
       - name: "Generate a key for the source cache"
         shell: bash
