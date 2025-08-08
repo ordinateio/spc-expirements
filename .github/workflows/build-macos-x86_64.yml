@@ -59,7 +59,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: "Download the SPC binary"
-        run: curl -fsSL -o spc https://dl.static-php.dev/static-php-cli/spc-bin/nightly/spc-linux-x86_64 && chmod +x spc
+        run: curl -fsSL -o spc https://dl.static-php.dev/static-php-cli/spc-bin/nightly/spc-macos-x86_64 && chmod +x spc
 
       - name: "Generate a key for the source cache"
         shell: bash
