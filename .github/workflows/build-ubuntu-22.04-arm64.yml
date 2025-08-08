@@ -1,4 +1,4 @@
-name: "Build on Ubuntu 22.04 arm"
+name: "Build on Ubuntu 22.04 arm64"
 
 on:
   workflow_dispatch:
@@ -51,22 +51,15 @@ env:
 
 jobs:
   build:
-    name: "Build ${{ inputs.version }} on Ubuntu 22.04 arm"
+    name: "Build ${{ inputs.version }} on Ubuntu 22.04 arm64"
     runs-on: ubuntu-22.04-arm
 
     steps:
       - name: "Checkout"
         uses: actions/checkout@v4
 
-      - name: "Cache the SPC binary"
-        id: cache-spc-binary
-        uses: actions/cache@v4
-        with:
-          path: spc
-          key: spc-binary
-
       - name: "Download the SPC binary"
-#        if: steps.cache-spc-binary.outputs.cache-hit != 'true'
+        if: steps.cache-spc-binary.outputs.cache-hit != 'true'
         run: curl -fsSL -o spc https://dl.static-php.dev/static-php-cli/spc-bin/nightly/spc-linux-aarch64 && chmod +x spc
 
       - name: "Generate a key for the source cache"
@@ -115,21 +108,21 @@ jobs:
         if: ${{ inputs.build-cli == true }}
         uses: actions/upload-artifact@v4
         with:
-          name: cli-${{ inputs.version }}-ubuntu-22.04-arm
+          name: cli-${{ inputs.version }}-ubuntu-22.04-arm64
           path: buildroot/bin/php
 
       - name: "Upload a FPM SAPI"
         if: ${{ inputs.build-fpm == true }}
         uses: actions/upload-artifact@v4
         with:
-          name: fpm-${{ inputs.version }}-ubuntu-22.04-arm
+          name: fpm-${{ inputs.version }}-ubuntu-22.04-arm64
           path: buildroot/bin/php-fpm
 
       - name: "Upload a Micro SAPI"
         if: ${{ inputs.build-micro == true }}
         uses: actions/upload-artifact@v4
         with:
-          name: micro-${{ inputs.version }}-ubuntu-22.04-arm
+          name: micro-${{ inputs.version }}-ubuntu-22.04-arm64
           path: buildroot/bin/micro.sfx
 
       - name: "Upload the license files"
