@@ -64,7 +64,7 @@ jobs:
       - name: "Generate a key for the source cache"
         shell: bash
         run: |
-          INPUT_HASH=$(echo "${{ runner.os }}-${{ inputs.version }}-${{ inputs.extensions }}-${{ inputs.libs }}" | shasum -a 512 | awk '{print $1}')
+          INPUT_HASH=$(echo "${{ runner.os }}-${{ inputs.version }}-${{ inputs.extensions }}-${{ inputs.libs }}" | shasum -a 256 | awk '{print $1}')
           echo "INPUT_HASH=${INPUT_HASH}" >> "$GITHUB_ENV"
 
       - name: "Cache the downloaded source code"
