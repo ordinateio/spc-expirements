@@ -94,10 +94,10 @@ jobs:
 
       - name: "Run the \"download\" command"
         if: steps.cache-download.outputs.cache-hit != 'true'
-        run: .\spc.exe download --with-php="${{ inputs.version }}" --for-extensions="${{ inputs.extensions }}" --for-libs="${{ inputs.libs }}" ${{ env.SPC_BUILD_DEBUG }} --prefer-pre-built
+        run: .\spc.exe download --with-php="${{ inputs.version }}" --for-extensions="${{ inputs.extensions }}" --for-libs="${{ inputs.libs }}" --prefer-pre-built ${{ env.SPC_BUILD_DEBUG }}
 
       - name: "Run the \"build\" command"
-        run: .\spc.exe build "${{ inputs.extensions }}" --with-libs="${{ inputs.libs }}" ${{ env.SPC_BUILD_DEBUG }} ${{ env.SPC_BUILD_CLI }} ${{ env.SPC_BUILD_MICRO }}
+        run: .\spc.exe build "${{ inputs.extensions }}" --with-libs="${{ inputs.libs }}" ${{ env.SPC_BUILD_CLI }} ${{ env.SPC_BUILD_MICRO }} ${{ env.SPC_BUILD_DEBUG }}
 
       - name: "Upload a CLI SAPI"
         if: ${{ inputs.build-cli == true }}
