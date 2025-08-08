@@ -53,13 +53,6 @@ jobs:
       - name: "Checkout"
         uses: actions/checkout@v4
 
-      - name: "Cache the SPC binary"
-        id: cache-spc-binary
-        uses: actions/cache@v4
-        with:
-          path: spc.exe
-          key: spc-binary
-
       - name: "Download the SPC binary"
         if: steps.cache-spc-binary.outputs.cache-hit != 'true'
         run: curl.exe -fsSL -o spc.exe https://dl.static-php.dev/static-php-cli/spc-bin/nightly/spc-windows-x64.exe
