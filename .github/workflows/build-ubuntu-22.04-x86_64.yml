@@ -107,7 +107,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: cli-${{ inputs.version }}-ubuntu-22.04-x86_64
-          path: buildroot/bin/php.exe
+          path: buildroot/bin/php
 
       - name: "Upload a Micro SAPI"
         if: ${{ inputs.build-micro == true }}
