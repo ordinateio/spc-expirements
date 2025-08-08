@@ -22,31 +22,27 @@ on:
 
       libs:
         description: "Libraries to build (comma separated)"
+        required: true
         type: string
         default: "freetype,libjpeg,libavif,libwebp"
 
       build-cli:
-        description: "Build CLI binary"
+        description: "Build CLI SAPI"
         type: boolean
         default: true
 
       build-micro:
-        description: "Build PHPMicro binary"
+        description: "Build Micro SAPI"
         type: boolean
         default: false
 
       prefer-pre-built:
-        description: "Prefer pre-built binaries"
+        description: "Prefer pre-built binary files"
         type: boolean
         default: true
 
       debug:
         description: "Show full build logs"
-        type: boolean
-        default: false
-
-      no-strip:
-        description: "Keep debug symbols for debugging"
         type: boolean
         default: false
 
@@ -86,14 +82,6 @@ jobs:
           path: downloads
           key: php-${{ env.INPUT_HASH }}
 
-      - name: "Enable the debugging option"
-        if: inputs.debug == true
-        run: echo "SPC_BUILD_DEBUG=--debug" >> $env:GITHUB_ENV
-
-      - name: "Enable the \"prefer pre-built\" option"
-        if: inputs.prefer-pre-built == true
-        run: echo "SPC_PRE_BUILT=--prefer-pre-built" >> $env:GITHUB_ENV
-
       - name: "Enable the CLI SAPI option"
         if: ${{ inputs.build-cli == true }}
         run: echo "SPC_BUILD_CLI=--build-cli" >> $env:GITHUB_ENV
@@ -101,6 +89,14 @@ jobs:
       - name: "Enable the Micro SAPI option"
         if: ${{ inputs.build-micro == true }}
         run: echo "SPC_BUILD_MICRO=--build-micro" >> $env:GITHUB_ENV
+
+      - name: "Enable the \"prefer pre-built\" option"
+        if: inputs.prefer-pre-built == true
+        run: echo "SPC_PRE_BUILT=--prefer-pre-built" >> $env:GITHUB_ENV
+
+      - name: "Enable the debugging option"
+        if: inputs.debug == true
+        run: echo "SPC_BUILD_DEBUG=--debug" >> $env:GITHUB_ENV
 
       - name: "Run the \"doctor\" command"
         run: .\spc.exe doctor --auto-fix
@@ -112,14 +108,14 @@ jobs:
       - name: "Run the \"build\" command"
         run: .\spc.exe build "${{ inputs.extensions }}" --with-libs="${{ inputs.libs }}" ${{ env.SPC_BUILD_DEBUG }} ${{ env.SPC_BUILD_CLI }} ${{ env.SPC_BUILD_MICRO }}
 
-      - name: "Upload the PHP CLI SAPI"
+      - name: "Upload the CLI SAPI"
         if: ${{ inputs.build-cli == true }}
         uses: actions/upload-artifact@v4
         with:
           name: cli-${{ inputs.version }}-windows-x86_64
           path: buildroot/bin/php.exe
 
-      - name: "Upload the PHP Micro SAPI"
+      - name: "Upload the Micro SAPI"
         if: ${{ inputs.build-micro == true }}
         uses: actions/upload-artifact@v4
         with:
@@ -132,7 +128,7 @@ jobs:
           name: license-files
           path: buildroot/license/
 
-      - name: "Upload the metadata"
+      - name: "Upload the build metadata files"
         uses: actions/upload-artifact@v4
         with:
           name: build-meta
