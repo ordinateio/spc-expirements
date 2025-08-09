@@ -1,4 +1,4 @@
-name: "Build on Windows x86_64"
+name: "Build on Windows 2022 x64"
 
 on:
   workflow_dispatch:
@@ -46,7 +46,7 @@ env:
 
 jobs:
   build:
-    name: "Build ${{ inputs.version }} on Windows x86_64"
+    name: "Build ${{ inputs.version }} on Windows 2022 x64"
     runs-on: windows-2022
 
     steps:
@@ -86,7 +86,7 @@ jobs:
 
       - name: "Run the \"download\" command"
         if: steps.cache-download.outputs.cache-hit != 'true'
-        run: .\spc.exe download --with-php="${{ inputs.version }}" --for-extensions="${{ inputs.extensions }}" --for-libs="${{ inputs.libs }}" --prefer-pre-built ${{ env.SPC_BUILD_DEBUG }}
+        run: .\spc.exe download --with-php="${{ inputs.version }}" --for-extensions="${{ inputs.extensions }}" --for-libs="${{ inputs.libs }}" ${{ env.SPC_BUILD_DEBUG }} --prefer-pre-built
 
       - name: "Run the \"build\" command"
         run: .\spc.exe build "${{ inputs.extensions }}" --with-libs="${{ inputs.libs }}" ${{ env.SPC_BUILD_CLI }} ${{ env.SPC_BUILD_MICRO }} ${{ env.SPC_BUILD_DEBUG }}
@@ -95,14 +95,14 @@ jobs:
         if: ${{ inputs.build-cli == true }}
         uses: actions/upload-artifact@v4
         with:
-          name: cli-${{ inputs.version }}-windows-x86_64
+          name: cli-${{ inputs.version }}-windows-x64
           path: buildroot/bin/php.exe
 
       - name: "Upload a Micro SAPI"
         if: ${{ inputs.build-micro == true }}
         uses: actions/upload-artifact@v4
         with:
-          name: micro-${{ inputs.version }}-windows-x86_64
+          name: micro-${{ inputs.version }}-windows-x64
           path: buildroot/bin/micro.sfx
 
       - name: "Upload the license files"
