@@ -68,8 +68,8 @@ jobs:
           echo "INPUT_HASH=${INPUT_HASH}" >> "$GITHUB_ENV"
 
       - name: "Cache the downloaded source code"
-        id: cache-download
         uses: actions/cache@v4
+        id: cache-download
         with:
           path: downloads
           key: php-${{ env.INPUT_HASH }}
@@ -101,22 +101,22 @@ jobs:
         run: ./spc build "${{ inputs.extensions }}" --with-libs="${{ inputs.libs }}" ${{ env.SPC_BUILD_CLI }} ${{ env.SPC_BUILD_FPM }} ${{ env.SPC_BUILD_MICRO }} ${{ env.SPC_BUILD_DEBUG }}
 
       - name: "Upload a CLI SAPI"
-        if: ${{ inputs.build-cli == true }}
         uses: actions/upload-artifact@v4
+        if: ${{ inputs.build-cli == true }}
         with:
           name: cli-${{ inputs.version }}-macos-14-arm64
           path: buildroot/bin/php
 
       - name: "Upload a FPM SAPI"
-        if: ${{ inputs.build-fpm == true }}
         uses: actions/upload-artifact@v4
+        if: ${{ inputs.build-fpm == true }}
         with:
           name: fpm-${{ inputs.version }}-macos-14-arm64
           path: buildroot/bin/php-fpm
 
       - name: "Upload a Micro SAPI"
-        if: ${{ inputs.build-micro == true }}
         uses: actions/upload-artifact@v4
+        if: ${{ inputs.build-micro == true }}
         with:
           name: micro-${{ inputs.version }}-macos-14-arm64
           path: buildroot/bin/micro.sfx
