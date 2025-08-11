@@ -59,12 +59,12 @@ jobs:
       - name: "Generate a key for the source cache"
         shell: bash
         run: |
-          INPUT_HASH=$(echo "${{ runner.os }}-${{ inputs.version }}-${{ inputs.extensions }}-${{ inputs.libs }}" | sha256sum | awk '{print $1}')
+          INPUT_HASH=$(echo "${{ runner.os }}-${{ runner.arch }-${{ inputs.version }}-${{ inputs.extensions }}-${{ inputs.libs }}" | sha256sum | awk '{print $1}')
           echo "INPUT_HASH=${INPUT_HASH}" >> "$GITHUB_ENV"
 
       - name: "Cache the downloaded source code"
-        id: cache-download
         uses: actions/cache@v4
+        id: cache-download
         with:
           path: downloads
           key: php-${{ env.INPUT_HASH }}
@@ -92,15 +92,15 @@ jobs:
         run: .\spc.exe build "${{ inputs.extensions }}" --with-libs="${{ inputs.libs }}" ${{ env.SPC_BUILD_CLI }} ${{ env.SPC_BUILD_MICRO }} ${{ env.SPC_BUILD_DEBUG }}
 
       - name: "Upload a CLI SAPI"
-        if: ${{ inputs.build-cli == true }}
         uses: actions/upload-artifact@v4
+        if: ${{ inputs.build-cli == true }}
         with:
           name: cli-${{ inputs.version }}-windows-x64
           path: buildroot/bin/php.exe
 
       - name: "Upload a Micro SAPI"
-        if: ${{ inputs.build-micro == true }}
         uses: actions/upload-artifact@v4
+        if: ${{ inputs.build-micro == true }}
         with:
           name: micro-${{ inputs.version }}-windows-x64
           path: buildroot/bin/micro.sfx
