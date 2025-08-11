@@ -95,14 +95,14 @@ jobs:
         uses: actions/upload-artifact@v4
         if: ${{ inputs.build-cli == true }}
         with:
-          name: cli-${{ inputs.version }}-windows-x64
+          name: cli-${{ inputs.version }}-windows-2022-x64
           path: buildroot/bin/php.exe
 
       - name: "Upload a Micro SAPI"
         uses: actions/upload-artifact@v4
         if: ${{ inputs.build-micro == true }}
         with:
-          name: micro-${{ inputs.version }}-windows-x64
+          name: micro-${{ inputs.version }}-windows-2022-x64
           path: buildroot/bin/micro.sfx
 
       - name: "Upload the license files"
