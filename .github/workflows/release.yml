@@ -9,48 +9,69 @@ env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 jobs:
-#  build-jobs:
-#    permissions:
-#      contents: write
-#    runs-on: ubuntu-latest
-#    steps:
-#      - name: "Checkout"
-#        uses: actions/checkout@v4
-#
-#      - name: Check current directory
-#        run: pwd
-#
-#      - name: List directory contents
-#        run: ls -laF
-#
-#      - name: "Trigger builds for all platforms"
-#        run: |
-#          gh workflow run build-on-windows-2022-x64.yml
-
-  release-assets:
-#    needs: build-jobs
+  build-jobs:
     runs-on: ubuntu-latest
-
-#    needs: build-jobs
     steps:
       - name: "Checkout"
         uses: actions/checkout@v4
 
-      - name: "Build on Windows 2022 x64"
-        uses: benc-uk/workflow-dispatch@v1
-        id: build-on-windows-2022-x64
+      - name: "Trigger builds for all platforms"
+        run: |
+          gh workflow run build-on-windows-2022-x64.yml
+
+  release-assets:
+    needs: build-jobs
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: "Checkout"
+        uses: actions/checkout@v4
+
+      - name: Wait for all builds to complete
+        uses: actions/github-script@v6
         with:
-          workflow: build-on-windows-2022-x64.yml
+          script: |
+           const core = require('@actions/core');
+            const github = require('@actions/github');
+            async function waitForWorkflowCompletion(workflowIds) {
+            let completed = false;
+            while (!completed) {
+            await sleep(30 * 1000);
+            const { data: workflowRuns } = await octokit.rest.actions.listWorkflowRuns({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            per_page: 100
+            });
+            const inProgressRuns = workflowRuns.workflow_runs.filter(run => !run.conclusion && workflowIds.includes(run.id));
+            if (inProgressRuns.length === 0) {
+            completed = true;
+            }
+            }
+            }
+            async function main() {
+            const workflowIds = [
+            'build-on-windows-2022-x64',
+            'build-on-windows-2022-arm64',
+            'build-on-linux-x64',
+            'build-on-linux-arm64',
+            'build-on-macos-x64',
+            'build-on-macos-arm64'
+            ];
+            await waitForWorkflowCompletion(workflowIds);
+            }
+            main();
+
+
+
 
       - name: "Download artifacts from previous jobs"
         uses: actions/download-artifact@v5
         with:
-          artifact-ids: ${{ steps.build-on-windows-2022-x64.outputs.workflowId }}
-          path: ./artifacts
+          path: ./release-artifacts/
 
       - name: Add artifacts as release assets
         uses: softprops/action-gh-release@v1
         with:
           body_path: CHANGELOG.md
           files: |
-            artifacts/*
+            release-artifact/*
