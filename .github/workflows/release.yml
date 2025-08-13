@@ -31,35 +31,37 @@ jobs:
         uses: actions/github-script@v6
         with:
           script: |
-           const core = require('@actions/core');
-            const github = require('@actions/github');
-            async function waitForWorkflowCompletion(workflowIds) {
-            let completed = false;
-            while (!completed) {
-            await sleep(30 * 1000);
-            const { data: workflowRuns } = await octokit.rest.actions.listWorkflowRuns({
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-            per_page: 100
-            });
-            const inProgressRuns = workflowRuns.workflow_runs.filter(run => !run.conclusion && workflowIds.includes(run.id));
-            if (inProgressRuns.length === 0) {
-            completed = true;
+            {
+              const core = require('@actions/core');
+              const github = require('@actions/github');
+              async function waitForWorkflowCompletion(workflowIds) {
+              let completed = false;
+              while (!completed) {
+              await sleep(30 * 1000);
+              const { data: workflowRuns } = await octokit.rest.actions.listWorkflowRuns({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              per_page: 100
+              });
+              const inProgressRuns = workflowRuns.workflow_runs.filter(run => !run.conclusion && workflowIds.includes(run.id));
+              if (inProgressRuns.length === 0) {
+              completed = true;
+              }
+              }
+              }
+              async function main() {
+              const workflowIds = [
+              'build-on-windows-2022-x64',
+              'build-on-windows-2022-arm64',
+              'build-on-linux-x64',
+              'build-on-linux-arm64',
+              'build-on-macos-x64',
+              'build-on-macos-arm64'
+              ];
+              await waitForWorkflowCompletion(workflowIds);
+              }
+              main();
             }
-            }
-            }
-            async function main() {
-            const workflowIds = [
-            'build-on-windows-2022-x64',
-            'build-on-windows-2022-arm64',
-            'build-on-linux-x64',
-            'build-on-linux-arm64',
-            'build-on-macos-x64',
-            'build-on-macos-arm64'
-            ];
-            await waitForWorkflowCompletion(workflowIds);
-            }
-            main();
 
 
 
