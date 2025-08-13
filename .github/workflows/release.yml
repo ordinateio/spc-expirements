@@ -41,11 +41,11 @@ jobs:
       - name: "Download artifacts from previous jobs"
         uses: actions/download-artifact@v5
         with:
-          path: ./release-artifacts/
+          path: ./artifacts/
 
       - name: Add artifacts as release assets
         uses: softprops/action-gh-release@v1
         with:
           body_path: CHANGELOG.md
           files: |
-            release-artifact/*
+            artifacts/*
