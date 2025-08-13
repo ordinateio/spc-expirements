@@ -9,26 +9,28 @@ env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 jobs:
-  build-jobs:
+#  build-jobs:
+#    runs-on: ubuntu-latest
+#    steps:
+#      - name: "Checkout"
+#        uses: actions/checkout@v4
+#
+#      - name: Check current directory
+#        run: pwd
+#
+#      - name: List directory contents
+#        run: ls -laF
+#
+#      - name: "Trigger builds for all platforms"
+#        run: |
+#          gh workflow run build-on-windows-2022-x64.yml
+
+  release-assets:
     runs-on: ubuntu-latest
     steps:
       - name: "Checkout"
         uses: actions/checkout@v4
 
-      - name: Check current directory
-        run: pwd
-
-      - name: List directory contents
-        run: ls -laF
-
-      - name: "Trigger builds for all platforms"
-        run: |
-          gh workflow run build-on-windows-2022-x64.yml
-
-  release-assets:
-    needs: build-jobs
-    runs-on: ubuntu-latest
-    steps:
       - name: "Build on Windows 2022 x64"
         uses: actions/workflow-dispatch@v1
         id: build-on-windows-2022-x64
