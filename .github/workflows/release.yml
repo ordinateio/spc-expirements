@@ -20,6 +20,13 @@ jobs:
     needs: build-jobs
     runs-on: ubuntu-latest
     steps:
+
+      - name: Check current directory
+        run: pwd
+
+      - name: List directory contents
+        run: ls -laF
+
       - name: "Build on Windows 2022 x64"
         uses: actions/workflow-dispatch@v1
         id: build-on-windows-2022-x64
