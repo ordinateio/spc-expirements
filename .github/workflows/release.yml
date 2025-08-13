@@ -31,9 +31,6 @@ jobs:
         uses: actions/github-script@v6
         with:
           script: |
-              let core = require('@actions/core');
-              let github = require('@actions/github');
-
               async function waitForWorkflowCompletion(workflowIds) {
               let completed = false;
               while (!completed) {
