@@ -31,37 +31,35 @@ jobs:
         uses: actions/github-script@v6
         with:
           script: |
-            const github = require('@actions/github');
+            async function waitForWorkflowCompletion(workflowIds) {
+              let completed = false;
 
-              async function waitForWorkflowCompletion(workflowIds) {
-                let completed = false;
+              while (!completed) {
+                await setInterval(() => {}, 30 * 1000);
 
-                while (!completed) {
-                  await sleep(30 * 1000);
+                const { data: workflowRuns } = await octokit.rest.actions.listWorkflowRuns({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  per_page: 100
+                });
 
-                  const { data: workflowRuns } = await octokit.rest.actions.listWorkflowRuns({
-                    owner: context.repo.owner,
-                    repo: context.repo.repo,
-                    per_page: 100
-                  });
+                const inProgressRuns = workflowRuns.workflow_runs.filter(run => !run.conclusion && workflowIds.includes(run.id));
 
-                  const inProgressRuns = workflowRuns.workflow_runs.filter(run => !run.conclusion && workflowIds.includes(run.id));
-
-                  if (inProgressRuns.length === 0) {
-                    completed = true;
-                  }
+                if (inProgressRuns.length === 0) {
+                  completed = true;
                 }
               }
+            }
 
-              async function main() {
-                const workflowIds = [
-                  'build-on-windows-2022-x64',
-                ];
+            async function main() {
+              const workflowIds = [
+                'build-on-windows-2022-x64',
+              ];
 
-                await waitForWorkflowCompletion(workflowIds);
-              }
+              await waitForWorkflowCompletion(workflowIds);
+            }
 
-              main();
+            main();
 
       - name: "Download artifacts from previous jobs"
         uses: actions/download-artifact@v5
