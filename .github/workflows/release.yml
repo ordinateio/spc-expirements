@@ -52,11 +52,6 @@ jobs:
               async function main() {
               const workflowIds = [
               'build-on-windows-2022-x64',
-              'build-on-windows-2022-arm64',
-              'build-on-linux-x64',
-              'build-on-linux-arm64',
-              'build-on-macos-x64',
-              'build-on-macos-arm64'
               ];
               await waitForWorkflowCompletion(workflowIds);
               }
