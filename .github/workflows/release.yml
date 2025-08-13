@@ -46,6 +46,5 @@ jobs:
       - name: Add artifacts as release assets
         uses: softprops/action-gh-release@v1
         with:
-          body_path: CHANGELOG.md
           files: |
             artifacts/*
