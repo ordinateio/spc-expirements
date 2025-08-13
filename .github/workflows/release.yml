@@ -34,7 +34,7 @@ jobs:
           wait-list: |
             [
               {
-                "workflowFile": "build-on-windows-2022-x64.yml",
+                "workflowFile": "build-on-windows-2022-x64.yml"
               }
             ]
 
