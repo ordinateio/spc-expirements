@@ -20,49 +20,21 @@ jobs:
     needs: build-jobs
     runs-on: ubuntu-latest
     steps:
-      - name: "Wait for all builds to complete"
-        uses: actions/github-script@v6
+      - name: "Build on Windows 2022 x64"
+        uses: actions/workflow-dispatch@v1
+        id: build-on-windows-2022-x64
         with:
-          script: |
-            const core = require('@actions/core');
-            const github = require('@actions/github');
-
-            async function waitForWorkflowCompletion(workflowIds) {
-              let completed = false;
-
-              while (!completed) {
-                await sleep(30 * 1000);
-                const { data: workflowRuns } = await octokit.rest.actions.listWorkflowRuns({
-                  owner: context.repo.owner,
-                  repo: context.repo.repo,
-                  per_page: 100
-              });
-
-            const inProgressRuns = workflowRuns.workflow_runs.filter(run => !run.conclusion && workflowIds.includes(run.id));
-            if (inProgressRuns.length === 0) {
-            completed = true;
-            }
-            }
-            }
-            async function main() {
-            const workflowIds = [
-              'build-on-windows-2022-x64',
-            ];
-            await waitForWorkflowCompletion(workflowIds);
-            }
-            main();
-
+          workflow: build-on-windows-2022-x64.yml
 
       - name: "Download artifacts from previous jobs"
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v5
         with:
-          path: ./release-artifacts/
+          artifact-ids: ${{ steps.build-on-windows-2022-x64.outputs.workflowId }}
+          path: ./artifacts
 
       - name: Add artifacts as release assets
         uses: softprops/action-gh-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           body_path: CHANGELOG.md
           files: |
-            release-artifacts/*
+            artifacts/*
