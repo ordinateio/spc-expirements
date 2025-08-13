@@ -26,7 +26,10 @@ jobs:
 #          gh workflow run build-on-windows-2022-x64.yml
 
   release-assets:
+    permissions:
+      contents: write
     runs-on: ubuntu-latest
+
 #    needs: build-jobs
     steps:
       - name: "Checkout"
