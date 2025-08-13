@@ -108,13 +108,13 @@ jobs:
       - name: "Upload the license files"
         uses: actions/upload-artifact@v4
         with:
-          name: license-files
+          name: license-files-${{ inputs.version }}-windows-2022-x64
           path: buildroot/license/
 
       - name: "Upload the metadata files"
         uses: actions/upload-artifact@v4
         with:
-          name: build-meta
+          name: build-metadata-${{ inputs.version }}-windows-2022-x64
           path: |
             buildroot/build-extensions.json
             buildroot/build-libraries.json
