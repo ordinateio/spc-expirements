@@ -1,8 +1,6 @@
 name: "Release Build"
 
 on:
-  release:
-    types: [ created ]
   workflow_dispatch:
 
 env:
@@ -46,6 +44,7 @@ jobs:
 
       - name: "Add artifacts as release assets"
         uses: softprops/action-gh-release@v1
+        if: github.ref_type == 'tag'
         with:
           files: |
             artifacts/*
