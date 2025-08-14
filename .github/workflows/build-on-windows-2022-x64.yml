@@ -34,7 +34,7 @@ on:
       build-micro:
         description: "Build a Micro SAPI"
         type: boolean
-        default: false
+        default: true
 
       debug:
         description: "Show full build logs"
