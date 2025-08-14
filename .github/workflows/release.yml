@@ -27,7 +27,7 @@ jobs:
       - name: "Checkout"
         uses: actions/checkout@v4
 
-      - name: Wait for all builds to complete
+      - name: "Wait for all builds to complete"
         uses: kachick/wait-other-jobs@v3.8.1
         timeout-minutes: 15
         with:
@@ -41,9 +41,10 @@ jobs:
       - name: "Download artifacts from previous jobs"
         uses: actions/download-artifact@v5
         with:
+          name: cli-8.4-windows-2022-x64
           path: ./artifacts/
 
-      - name: Add artifacts as release assets
+      - name: "Add artifacts as release assets"
         uses: softprops/action-gh-release@v1
         with:
           files: |
