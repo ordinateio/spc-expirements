@@ -121,6 +121,12 @@ jobs:
       - name: "Run the \"build\" command"
         run: .\spc.exe build "${{ inputs.extensions }}" --with-libs="${{ inputs.libs }}" ${{ env.SPC_BUILD_CLI }} ${{ env.SPC_BUILD_MICRO }} ${{ env.SPC_BUILD_DEBUG }}
 
+      - name: "Print \"version\""
+        run: buildroot/bin/php.exe -V
+
+      - name: "Print \"modules\""
+        run: buildroot/bin/php.exe -m
+
       - name: "Upload a CLI SAPI"
         uses: actions/upload-artifact@v4
         if: ${{ inputs.build-cli == true }}
