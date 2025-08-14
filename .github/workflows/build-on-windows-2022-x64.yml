@@ -40,9 +40,8 @@ on:
         description: "Show full build logs"
         type: boolean
         default: false
-  release:
-    types: [ created ]
 
+  workflow_call:
     inputs:
       version:
         description: "PHP version to build"
@@ -71,7 +70,6 @@ on:
         description: "Build a Micro SAPI"
         type: boolean
         default: true
-
 
 env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
