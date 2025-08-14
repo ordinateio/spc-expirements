@@ -1,7 +1,8 @@
 name: "Release Build"
 
 on:
-  workflow_dispatch:
+  release:
+    types: [ created ]
 
 env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -16,35 +17,3 @@ jobs:
       - name: "Trigger builds for all platforms"
         run: |
           gh workflow run build-on-windows-2022-x64.yml
-
-  release-assets:
-    needs: build-jobs
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: "Checkout"
-        uses: actions/checkout@v4
-
-      - name: "Wait for all builds to complete"
-        uses: kachick/wait-other-jobs@v3.8.1
-        timeout-minutes: 15
-        with:
-          wait-list: |
-            [
-              {
-                "workflowFile": "build-on-windows-2022-x64.yml"
-              }
-            ]
-
-      - name: "Download artifacts from previous jobs"
-        uses: actions/download-artifact@v5
-        with:
-          name: cli-8.4-windows-2022-x64
-          path: ./artifacts/
-
-      - name: "Add artifacts as release assets"
-        uses: softprops/action-gh-release@v1
-        if: github.ref_type == 'tag'
-        with:
-          files: |
-            artifacts/*
