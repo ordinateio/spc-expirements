@@ -157,7 +157,6 @@ jobs:
 
       - name: "Add artifacts as release assets"
         uses: softprops/action-gh-release@v1
-        if: github.ref_type == 'tag'
         with:
           files: |
             cli-${{ inputs.version }}-windows-2022-x64
