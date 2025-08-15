@@ -71,7 +71,7 @@ jobs:
 
       - name: "Build with Xdebug"
         if: ${{ inputs.xdebug == true }}
-        run: echo "SPC_BUILD_XDEBUG=--build-shared=xdebug" >> $env:GITHUB_ENV
+        run: echo "SPC_BUILD_XDEBUG=--build-shared=\"xdebug\"" >> $env:GITHUB_ENV
 
       - name: "Show full build logs"
         if: inputs.debug == true
@@ -84,7 +84,7 @@ jobs:
         run: .\spc.exe download --with-php="${{ inputs.version }}" --for-extensions="${{ inputs.extensions }},xdebug" --for-libs="${{ inputs.libs }}" ${{ env.SPC_BUILD_DEBUG }} --prefer-pre-built
 
       - name: "Run the \"build\" command"
-        run: .\spc.exe build "${{ inputs.extensions }},xdebug" --with-libs="${{ inputs.libs }}" ${{ env.SPC_BUILD_CLI }} ${{ env.SPC_BUILD_MICRO }} ${{ env.SPC_BUILD_DEBUG }}
+        run: .\spc.exe build "${{ inputs.extensions }}" ${{ env.SPC_BUILD_XDEBUG }} --with-libs="${{ inputs.libs }}" ${{ env.SPC_BUILD_CLI }} ${{ env.SPC_BUILD_MICRO }} ${{ env.SPC_BUILD_DEBUG }}
 
       - name: "Print \"files list\""
         run: ls -lha buildroot/bin
