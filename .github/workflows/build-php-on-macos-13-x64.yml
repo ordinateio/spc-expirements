@@ -88,11 +88,11 @@ jobs:
 
       - name: "Print information about version of PHP"
         if: ${{ inputs.build-cli == true }}
-        run: buildroot/bin/php --version
+        run: ./buildroot/bin/php --version
 
       - name: "Print information about modules of PHP"
         if: ${{ inputs.build-cli == true }}
-        run: buildroot/bin/php -m
+        run: ./buildroot/bin/php -m
 
       - name: "Upload a CLI SAPI"
         uses: actions/upload-artifact@v4
