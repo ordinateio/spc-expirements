@@ -61,19 +61,6 @@ jobs:
       - name: "Download the SPC binary"
         run: curl.exe -fsSL -o spc.exe https://github.com/crazywhalecc/static-php-cli/releases/download/2.7.1/spc-windows-x64.exe
 
-      - name: "Generate a key for the source cache"
-        shell: bash
-        run: |
-          INPUT_HASH=$(echo "${{ runner.os }}-${{ runner.arch }}-${{ inputs.version }}-${{ inputs.extensions }}-${{ inputs.libs }}" | sha256sum | awk '{print $1}')
-          echo "INPUT_HASH=${INPUT_HASH}" >> "$GITHUB_ENV"
-
-      - name: "Cache the downloaded source code"
-        uses: actions/cache@v4
-        id: cache-download
-        with:
-          path: downloads
-          key: php-${{ env.INPUT_HASH }}
-
       - name: "Build a CLI SAPI"
         if: ${{ inputs.build-cli == true }}
         run: echo "SPC_BUILD_CLI=--build-cli" >> $env:GITHUB_ENV
@@ -94,7 +81,6 @@ jobs:
         run: .\spc.exe doctor --auto-fix
 
       - name: "Run the \"download\" command"
-        if: steps.cache-download.outputs.cache-hit != 'true'
         run: .\spc.exe download --with-php="${{ inputs.version }}" --for-extensions="${{ inputs.extensions }},xdebug" --for-libs="${{ inputs.libs }}" ${{ env.SPC_BUILD_DEBUG }} --prefer-pre-built
 
       - name: "Run the \"build\" command"
