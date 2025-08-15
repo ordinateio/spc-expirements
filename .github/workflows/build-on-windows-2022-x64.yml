@@ -46,7 +46,7 @@ env:
 
 jobs:
   build:
-    name: "Build ${{ inputs.version }} on Windows 2022 x64"
+    name: "Build PHP ${{ inputs.version }} on Windows 2022 x64"
     runs-on: windows-2022
 
     steps:
