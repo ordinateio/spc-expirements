@@ -99,32 +99,32 @@ jobs:
         if: ${{ inputs.build-cli == true }}
         with:
           name: cli-${{ inputs.version }}-macos-14-arm64
-          path: buildroot/bin/php
+          path: ./buildroot/bin/php
 
       - name: "Upload a Micro SAPI"
         uses: actions/upload-artifact@v4
         if: ${{ inputs.build-micro == true }}
         with:
           name: micro-${{ inputs.version }}-macos-14-arm64
-          path: buildroot/bin/micro.sfx
+          path: ./buildroot/bin/micro.sfx
 
       - name: "Upload a FPM SAPI"
         uses: actions/upload-artifact@v4
         if: ${{ inputs.build-fpm == true }}
         with:
           name: fpm-${{ inputs.version }}-macos-14-arm64
-          path: buildroot/bin/php-fpm
+          path: ./buildroot/bin/php-fpm
 
       - name: "Upload the license files"
         uses: actions/upload-artifact@v4
         with:
           name: license-files-${{ inputs.version }}-macos-14-arm64
-          path: buildroot/license/
+          path: ./buildroot/license/
 
       - name: "Upload the metadata files"
         uses: actions/upload-artifact@v4
         with:
           name: build-metadata-${{ inputs.version }}-macos-14-arm64
           path: |
-            buildroot/build-extensions.json
-            buildroot/build-libraries.json
+            ./buildroot/build-extensions.json
+            ./buildroot/build-libraries.json
